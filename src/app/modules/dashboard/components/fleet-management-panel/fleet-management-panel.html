@@ -1,0 +1,100 @@
+<div class="mat-shadow-2" style="margin: 20px">
+  <div style="display: flex; justify-content: space-between">
+    <mat-form-field appearance="outline" style="width: clamp(240px, 34vw, 340px)">
+      <mat-label>جستجو</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        #searchInput
+        matInput
+        (keyup)="applyFilter($event.target.value)"
+        placeholder="جستجو..."
+        [formControl]="searchField"
+      />
+      @if (searchField.getRawValue()) {
+      <button
+        type="button"
+        matSuffix
+        matIconButton
+        aria-label="Clear"
+        (click)="searchField.setValue('')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      }
+    </mat-form-field>
+    <button
+      matButton="filled"
+      type="button"
+      style="margin-inline-start: 10px"
+      (click)="addDialog = true; editDialog.enabled= false"
+    >
+      <mat-icon>add</mat-icon>
+      افزودن
+    </button>
+  </div>
+  <div class="table-scroll">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>آیدی</th>
+        <td mat-cell *matCellDef="let fleet">{{fleet.id}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="plate">
+        <th mat-header-cell *matHeaderCellDef>پلاک</th>
+        <td mat-cell *matCellDef="let fleet">{{fleet.plate}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="organization">
+        <th mat-header-cell *matHeaderCellDef>سازمان</th>
+        <td mat-cell *matCellDef="let fleet">{{fleet.organization}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>نوع</th>
+        <td mat-cell *matCellDef="let fleet">{{fleet.type}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="usage">
+        <th mat-header-cell *matHeaderCellDef>کاربرد</th>
+        <td mat-cell *matCellDef="let fleet">{{fleet.usage}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef>وضعیت</th>
+        <td mat-cell *matCellDef="let fleet">{{fleet.state}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>عملیات</th>
+        <td mat-cell *matCellDef="let fleet" style="min-width: 8rem">
+          <button mat-icon-button (click)="deleteVehicle(fleet.id)" type="button">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button (click)="editVehicle(fleet.id)" type="button">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of fleet"
+  >
+  </mat-paginator>
+</div>
+
+@if (editDialog.enabled){
+<app-edit-form
+  (onClose)="editDialog.enabled = false"
+  (onSubmited)="editDialog.enabled = false"
+  [id]="editDialog.id"
+></app-edit-form>
+} @if (addDialog){
+<app-add-form (onClose)="addDialog = false" (onSubmited)="addDialog = false"></app-add-form>
+}

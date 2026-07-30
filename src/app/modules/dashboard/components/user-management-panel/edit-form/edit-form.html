@@ -1,0 +1,39 @@
+<form class="user-form" (ngSubmit)="editUser()" [formGroup]="form">
+  <h3>ویرایش کاربر</h3>
+
+  <div class="user-form__fields">
+    <mat-form-field appearance="outline">
+      <mat-label>نام</mat-label>
+      <input matInput name="name" formControlName="name" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>ایمیل</mat-label>
+      <input matInput type="email" name="email" formControlName="email" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>نقش</mat-label>
+      <mat-select formControlName="role">
+        @for (role of roleOptions; track role) {
+        <mat-option [value]="role.value">{{role.viewValue}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>نام کاربری</mat-label>
+      <input matInput name="username" formControlName="username" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>رمز عبور</mat-label>
+      <input matInput name="password" formControlName="password" required />
+    </mat-form-field>
+  </div>
+
+  <div class="user-form__buttons">
+    <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">ویرایش</button>
+    <button mat-button type="button" (click)="close()">انصراف</button>
+  </div>
+</form>

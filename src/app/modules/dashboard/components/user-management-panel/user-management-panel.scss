@@ -1,0 +1,19 @@
+$teal: #34bcb1;
+$teal-dark: #2aa89e;
+$input-bg: #f2f2f2;
+$input-border: #e6e6e6;
+$muted: #9a9a9a;
+
+.table-scroll {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+  }
+  th,
+  td {
+    white-space: nowrap;
+  }
+
+  scrollbar-width: thin;
+}

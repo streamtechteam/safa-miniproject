@@ -1,0 +1,104 @@
+@use '@angular/material' as mat;
+@use './shiraz-theme-colors' as brand;
+
+html {
+  color-scheme: light;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: brand.$primary-palette,
+        tertiary: brand.$tertiary-palette,
+        theme-type: light,
+      ),
+      typography: (
+        plain-family: 'Vazirmatn, Tahoma, sans-serif',
+        brand-family: 'Vazirmatn, Tahoma, sans-serif',
+        bold-weight: 700,
+        medium-weight: 500,
+        regular-weight: 400,
+      ),
+      density: 0,
+    ),
+    $overrides: (primary: #34bcb1, on-primary: #ffffff)
+  );
+
+  --app-teal: #34bcb1;
+  --app-teal-dark: #2aa89e;
+  --app-input-bg: #f2f2f2;
+  --app-input-border: #e6e6e6;
+  --app-muted: #9a9a9a;
+  --app-error: #d9534f;
+  --app-font: 'Vazirmatn', Tahoma, sans-serif;
+}
+
+body {
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font-family: var(--app-font);
+  margin: 0;
+}
+
+html {
+  $shape: 8px;
+
+  @include mat.button-overrides(
+    (
+      filled-container-shape: $shape,
+      outlined-container-shape: $shape,
+      protected-container-shape: $shape,
+      tonal-container-shape: $shape,
+      text-container-shape: $shape,
+    )
+  );
+
+  @include mat.icon-button-overrides(
+    (
+      container-shape: $shape,
+      icon-color: var(--app-teal),
+    )
+  );
+
+  @include mat.fab-overrides(
+    (
+      container-shape: $shape,
+      small-container-shape: $shape,
+      extended-container-shape: $shape,
+      container-color: var(--app-teal),
+      foreground-color: #ffffff,
+      state-layer-color: #ffffff,
+    )
+  );
+
+  @include mat.form-field-overrides(
+    (
+      filled-container-shape: $shape,
+      filled-container-color: var(--app-input-bg),
+      filled-active-indicator-color: var(--app-input-border),
+      filled-hover-active-indicator-color: var(--app-teal),
+      filled-focus-active-indicator-color: var(--app-teal),
+      filled-input-text-placeholder-color: var(--app-muted),
+      outlined-container-shape: $shape,
+      outlined-outline-color: var(--app-input-border),
+      outlined-hover-outline-color: var(--app-teal),
+      outlined-focus-outline-color: var(--app-teal),
+      outlined-input-text-placeholder-color: var(--app-muted),
+      leading-icon-color: var(--app-teal),
+      trailing-icon-color: var(--app-teal),
+      focus-select-arrow-color: var(--app-teal),
+      error-text-color: var(--app-error),
+    )
+  );
+  @include mat.menu-overrides(
+    (
+      container-shape: 12px,
+      divider-color: var(--app-teal),
+      container-color: white,
+    )
+  );
+  @include mat.select-overrides(
+    (
+      panel-background-color: white,
+    )
+  );
+}

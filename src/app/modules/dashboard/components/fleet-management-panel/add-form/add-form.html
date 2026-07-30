@@ -1,0 +1,54 @@
+<form class="fleet-form" (ngSubmit)="addVehicle()" [formGroup]="form">
+  <h3>افزودن خودرو</h3>
+
+  <div class="fleet-form__fields">
+    <mat-form-field appearance="outline">
+      <mat-label>پلاک</mat-label>
+      <input matInput name="plate" formControlName="plate" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>سازمان</mat-label>
+      <input matInput name="organization" formControlName="organization" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>نوع</mat-label>
+      <input matInput name="type" formControlName="type" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>کاربرد</mat-label>
+      <input matInput name="usage" formControlName="usage" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="location-field" (click)="openMapDialog()">
+      <mat-label>موقعیت</mat-label>
+      <input
+        matInput
+        readonly
+        [value]="locationLabel"
+        placeholder="انتخاب از روی نقشه"
+        (keydown.enter)="openMapDialog()"
+      />
+      <mat-icon matSuffix>location_on</mat-icon>
+      @if (form.get('location')?.invalid && locationTouched) {
+      <mat-error>موقعیت را انتخاب کنید</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>وضعیت</mat-label>
+      <mat-select formControlName="state">
+        @for (state of stateOptions; track state) {
+        <mat-option [value]="state.value">{{state.viewValue}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="fleet-form__buttons">
+    <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">افزودن</button>
+    <button mat-button type="button" (click)="close()">انصراف</button>
+  </div>
+</form>

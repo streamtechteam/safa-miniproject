@@ -1,0 +1,58 @@
+import { Component, ElementRef, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../dashboard/services/auth';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+@Component({
+  selector: 'app-login',
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './login.html',
+  styleUrl: './login.scss',
+})
+export class LoginComponent {
+  private authService: AuthService = inject(AuthService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+
+  loginForm = new FormGroup({
+    username: new FormControl<string>('', [Validators.required]),
+    password: new FormControl<string>('', [Validators.required]),
+    captcha: new FormControl<string>('', [Validators.required]),
+  });
+  hidePassword = true;
+
+  togglePassword(): void {
+    this.hidePassword = !this.hidePassword;
+  }
+
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+    this.authService
+      .login(
+        this.loginForm.getRawValue().username as string,
+        this.loginForm.getRawValue().password as string,
+      )
+      .subscribe((data) => {
+        if (data === 200) {
+          this.snackBar.open('ورود موفقیت آمیز بود.', undefined, { duration: 3000 });
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 1500);
+        } else if (data === 400) {
+          this.snackBar.open('ورود شکست خورد.', undefined, { duration: 3000 });
+        }
+      });
+  }
+}

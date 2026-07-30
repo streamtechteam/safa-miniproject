@@ -1,0 +1,27 @@
+<div
+  class="trigger"
+  (click)="isUserMenuOpened = !isUserMenuOpened;"
+  [matMenuTriggerFor]="profileMenu"
+>
+  <mat-icon>person</mat-icon>
+  <span> {{authData.name}} </span>
+  <mat-icon>
+    @if(!isUserMenuOpened){keyboard_arrow_down} @if(isUserMenuOpened){keyboard_arrow_up}
+  </mat-icon>
+</div>
+
+<mat-menu #profileMenu="matMenu" class="profile-menu">
+  <div mat-menu-item disabled class="menu-header">
+    <mat-icon>person</mat-icon>
+    <div class="user-info">
+      <strong>{{ authData.name }}</strong>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <button mat-menu-item (click)="onLogout()" class="logout-item">
+    <mat-icon>logout</mat-icon>
+    <span>خروج</span>
+  </button>
+</mat-menu>

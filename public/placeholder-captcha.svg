@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 90" width="300" height="90" font-family="monospace">
+  <defs>
+    <!-- Background Noise Pattern -->
+    <pattern id="noise" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.8" fill="#a0a0a0" opacity="0.4" />
+      <circle cx="4" cy="5" r="0.6" fill="#808080" opacity="0.3" />
+      <circle cx="5" cy="2" r="0.7" fill="#606060" opacity="0.3" />
+    </pattern>
+
+    <!-- Wave Distortion Filter for Text -->
+    <filter id="distort" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03 0.07" numOctaves="2" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="9" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+
+  <!-- Container Box -->
+  <rect width="300" height="90" fill="#f4f4f6" stroke="#cccccc" stroke-width="2" rx="4" />
+
+  <!-- Background Noise Layer -->
+  <rect width="300" height="90" fill="url(#noise)" />
+
+  <!-- Background Confusion Lines -->
+  <path d="M 10 70 Q 90 10 180 50 T 290 20" stroke="#b0b0d0" stroke-width="2.5" fill="none" opacity="0.7" />
+  <path d="M 5 25 Q 110 85 200 15 T 295 75" stroke="#c0a0a0" stroke-width="2" fill="none" opacity="0.6" />
+  <path d="M 20 45 C 80 5, 120 95, 280 40" stroke="#90b090" stroke-width="1.8" fill="none" opacity="0.6" />
+
+  <!-- Distorted Text Group -->
+  <g filter="url(#distort)" font-weight="900" font-size="36" letter-spacing="6">
+    <!-- Individual letter transforms to simulate organic misalignment -->
+    <text x="28" y="58" fill="#2c3e50" transform="rotate(-11, 35, 50) scale(0.9, 1.1)">k</text>
+    <text x="68" y="52" fill="#1f3a60" transform="rotate(14, 75, 50) scale(1.1, 0.95)">7</text>
+    <text x="108" y="62" fill="#342250" transform="rotate(-7, 115, 50)">X</text>
+    <text x="153" y="48" fill="#1b4d3e" transform="rotate(18, 160, 50) scale(1, 1.2)">9</text>
+    <text x="193" y="56" fill="#4a2318" transform="rotate(-15, 200, 50)">b</text>
+    <text x="238" y="50" fill="#2d2d2d" transform="rotate(8, 245, 50) scale(1.1, 0.9)">2</text>
+  </g>
+
+  <!-- Foreground Interference Lines (Occluding the text) -->
+  <path d="M 15 50 Q 80 80 150 35 T 285 55" stroke="#333333" stroke-width="1.5" fill="none" opacity="0.45" />
+  <path d="M 25 20 C 100 70, 190 10, 275 70" stroke="#111111" stroke-width="2" fill="none" opacity="0.35" stroke-dasharray="8,4" />
+</svg>

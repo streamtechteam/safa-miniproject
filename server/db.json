@@ -1,0 +1,55 @@
+{
+  "fleet": [
+    {
+      "id": "nJDEHqxUjNw",
+      "plate": "123-5",
+      "organization": "Vehicle Organization",
+      "type": "Sedan",
+      "usage": "Taxi",
+      "state": "moving",
+      "location": {
+        "latitude": 29.605661373288115,
+        "longitude": 52.56546950314839
+      }
+    },
+    {
+      "id": "-8B1KvZJniM",
+      "plate": "12324-2",
+      "organization": "Org",
+      "type": "Bus",
+      "usage": "City",
+      "state": "stopped",
+      "location": {
+        "latitude": 29.602306985963153,
+        "longitude": 52.54043723916632
+      }
+    }
+  ],
+  "users": [
+    {
+      "id": "lS5_WQkRLX8",
+      "name": "Taha Moosavi",
+      "email": "taha.moosavi.taha@gmail.com",
+      "role": "sys-admin",
+      "username": "tahamoosavi",
+      "password": "1234"
+    },
+    {
+      "name": "Ali Ahmadi",
+      "email": "ali.ahmadi@gmail.com",
+      "role": "technician ",
+      "username": "aliahmadi",
+      "password": "12345",
+      "id": "kBqDaKnUQ6c"
+    },
+    {
+      "name": "Ahmad",
+      "email": "ahmad@email.com",
+      "role": "technician ",
+      "username": "ahmad",
+      "password": "1234",
+      "id": "9DLpT6XVgL4"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

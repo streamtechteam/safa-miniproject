@@ -1,0 +1,13 @@
+.table-scroll {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+  }
+  th,
+  td {
+    white-space: nowrap;
+  }
+
+  scrollbar-width: thin;
+}

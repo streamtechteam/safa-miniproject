@@ -1,0 +1,126 @@
+@use 'sass:map';
+
+$_primary: (
+  0: #000000,
+  10: #00201d,
+  20: #003733,
+  25: #00433f,
+  30: #00504b,
+  35: #005d57,
+  40: #006a63,
+  50: #00867d,
+  60: #00a298,
+  70: #27bfb3,
+  80: #50dbcf,
+  90: #72f7eb,
+  95: #b2fff6,
+  98: #e4fffa,
+  99: #f2fffc,
+  100: #ffffff,
+);
+
+$_secondary: (
+  0: #000000,
+  10: #051f1d,
+  20: #1c3532,
+  25: #27403d,
+  30: #324b48,
+  35: #3e5754,
+  40: #4a6360,
+  50: #627c79,
+  60: #7b9692,
+  70: #96b1ad,
+  80: #b1ccc8,
+  90: #cce8e4,
+  95: #daf7f2,
+  98: #e4fffa,
+  99: #f2fffc,
+  100: #ffffff,
+);
+
+$_tertiary: (
+  0: #000000,
+  10: #001d33,
+  20: #17324a,
+  25: #233e55,
+  30: #2f4961,
+  35: #3b556e,
+  40: #47617a,
+  50: #607a94,
+  60: #7993af,
+  70: #94aeca,
+  80: #afc9e7,
+  90: #cee5ff,
+  95: #e8f2ff,
+  98: #f7f9ff,
+  99: #fcfcff,
+  100: #ffffff,
+);
+
+$_neutral: (
+  0: #000000,
+  10: #191c1c,
+  20: #2d3130,
+  25: #383c3b,
+  30: #444747,
+  35: #505352,
+  40: #5b5f5e,
+  50: #747877,
+  60: #8e9190,
+  70: #a9acaa,
+  80: #c4c7c6,
+  90: #e0e3e1,
+  95: #eff1f0,
+  98: #f7faf8,
+  99: #fafdfb,
+  100: #ffffff,
+);
+
+$_neutral-variant: (
+  0: #000000,
+  10: #141d1c,
+  20: #293231,
+  25: #343d3c,
+  30: #3f4947,
+  35: #4a5453,
+  40: #56605f,
+  50: #6f7977,
+  60: #899391,
+  70: #a3adab,
+  80: #bec9c6,
+  90: #dae5e2,
+  95: #e9f3f0,
+  98: #f1fcf9,
+  99: #f4fefc,
+  100: #ffffff,
+);
+
+$_error: (
+  0: #000000,
+  10: #410004,
+  20: #68000b,
+  25: #7a0a13,
+  30: #8b191d,
+  35: #9b2627,
+  40: #ac3231,
+  50: #cd4a47,
+  60: #ef635e,
+  70: #ff8982,
+  80: #ffb3ae,
+  90: #ffdad7,
+  95: #ffedeb,
+  98: #fff8f7,
+  99: #fffbff,
+  100: #ffffff,
+);
+
+$_rest: (
+  secondary: $_secondary,
+  neutral: $_neutral,
+  neutral-variant: $_neutral-variant,
+  error: $_error,
+);
+
+$primary-palette: map.merge($_primary, $_rest);
+
+$tertiary-palette: map.merge($_tertiary, $_rest);

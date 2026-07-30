@@ -1,0 +1,113 @@
+<div id="body">
+  <div id="login-container">
+    <div id="login-container__login-fields">
+      <header class="login-container__header">
+        <h1>سامانه کنترل و نظارت ناوگان</h1>
+        <p>شهرداری شیراز</p>
+      </header>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!--username-->
+        <div class="login-container__login-field">
+          <input
+            type="text"
+            formControlName="username"
+            placeholder="نام کاربری"
+            autocomplete="username"
+          />
+          <span
+            class="login-container__login-field__icon login-container__login-field__icon--right"
+            aria-hidden="true"
+          >
+            <img src="user.svg" alt="" />
+          </span>
+        </div>
+        @if (loginForm.get("username")?.invalid && (loginForm.get("username")?.dirty ||
+        loginForm.get("username")?.touched)) {
+
+        <div class="error">
+          @if (loginForm.get("username")?.hasError('required')) {
+          <div>لطفا نام کاربری را وارد کنید</div>
+          }
+        </div>
+        }
+
+        <!--password-->
+        <div class="login-container__login-field">
+          <input
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="گذرواژه"
+            autocomplete="current-password"
+          />
+          <span
+            class="login-container__login-field__icon login-container__login-field__icon--right"
+            aria-hidden="true"
+          >
+            <img src="lock.svg" alt="" />
+          </span>
+          <button
+            type="button"
+            class="login-container__login-field__icon login-container__login-field__icon--left"
+            (click)="togglePassword()"
+            [attr.aria-label]="hidePassword ? 'نمایش گذرواژه' : 'پنهان کردن گذرواژه'"
+          >
+            @if(hidePassword){
+            <svg viewBox="0 0 24 24">
+              <title>show password</title>
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            } @else if(!hidePassword){
+            <svg viewBox="0 0 24 24">
+              <title>hide password</title>
+              <path d="M3 3l18 18" />
+              <path d="M10.6 10.6a3 3 0 0 0 4.2 4.2" />
+              <path d="M9.4 5.2A9.7 9.7 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3 3.8" />
+              <path d="M6.2 6.2A17 17 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 3-.5" />
+            </svg>
+            }
+          </button>
+        </div>
+        @if (loginForm.get("password")?.invalid && (loginForm.get("password")?.dirty ||
+        loginForm.get("password")?.touched)) {
+
+        <div class="error">
+          @if (loginForm.get("password")?.hasError('required')) {
+          <div>لطفا رمز عبور را وارد کنید</div>
+          }
+        </div>
+        }
+
+        <!--captcha-->
+        <div class="login-container__captcha-row">
+          <div class="login-container__login-field login-container__captcha-input">
+            <input
+              type="text"
+              formControlName="captcha"
+              placeholder="کد امنیتی"
+              inputmode="numeric"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="login-container__captcha-image">
+            <img src="placeholder-captcha.svg" alt="" />
+          </div>
+        </div>
+
+        @if (loginForm.get("captcha")?.invalid && (loginForm.get("captcha")?.dirty ||
+        loginForm.get("captcha")?.touched)) {
+
+        <div class="error">
+          @if (loginForm.get("captcha")?.hasError('required')) {
+          <div>لطفا کد امنیتی را وارد کنید</div>
+          }
+        </div>
+        }
+
+        <button type="submit" class="login-container__submit-btn">ورود</button>
+      </form>
+    </div>
+    <div id="login-container__picture-frame"></div>
+  </div>
+</div>
