@@ -1,12 +1,12 @@
 .fleet {
   --accent: #13a89a;
-  --line: #ececec;
-  --muted: #8a8a8a;
+  --line: var(--app-input-border);
+  --muted: var(--app-muted);
   height: 100%;
   display: flex;
   flex-direction: column;
   font-family: 'Vazirmatn', Tahoma, system-ui, sans-serif;
-  color: #222;
+  color: var(--app-on-surface);
 }
 
 /* search bar */
@@ -20,7 +20,7 @@
   align-items: center;
   gap: 12px;
   padding: 8px 12px;
-  background: #fff;
+  background: var(--app-surface);
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
@@ -74,7 +74,7 @@
   width: 380px;
 
   max-height: calc(100% - 32px);
-  background: #fff;
+  background: var(--app-surface);
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -229,7 +229,7 @@
   top: 24px;
   left: 24px;
   width: 300px;
-  background: #fff;
+  background: var(--app-surface);
   border-radius: 12px;
   box-shadow: 0 14px 44px rgba(0, 0, 0, 0.2);
   z-index: 50;
@@ -284,7 +284,7 @@
     .value {
       font-size: 13px;
       font-weight: 600;
-      color: #333;
+      color: var(--app-on-surface);
     }
   }
 }

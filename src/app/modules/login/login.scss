@@ -1,8 +1,6 @@
 $teal: #34bcb1;
 $teal-dark: #2aa89e;
-$input-bg: #f2f2f2;
-$input-border: #e6e6e6;
-$muted: #9a9a9a;
+$muted: var(--app-muted);
 
 :host {
   display: block;
@@ -16,7 +14,7 @@ $muted: #9a9a9a;
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: #f0f0f0;
+  background: var(--app-input-bg);
   font-family: 'Vazirmatn', Tahoma, sans-serif;
   box-sizing: border-box;
 }
@@ -25,12 +23,12 @@ $muted: #9a9a9a;
   display: flex;
   width: min(92vw, 880px);
   min-height: 480px;
-  background: #ffffff;
+  background: var(--app-surface);
   border-radius: 24px;
   padding: 14px;
   box-shadow:
     0 0 0 1px rgba(52, 188, 177, 0.15),
-    0 18px 50px rgba(52, 188, 177, 0.22);
+    0 18px 50px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 
   &__header {
@@ -52,11 +50,39 @@ $muted: #9a9a9a;
     }
   }
   &__fields {
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 40px 56px;
+  }
+  .theme-toggle {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--app-muted);
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+
+    &:hover {
+      background-color: var(--app-input-bg);
+      color: var(--app-teal);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
   &__field {
     position: relative;
@@ -66,13 +92,13 @@ $muted: #9a9a9a;
       direction: rtl;
       width: 100%;
       height: 46px;
-      border: 1px solid $input-border;
+      border: 1px solid var(--app-input-border);
       border-radius: 8px;
-      background: $input-bg;
+      background: var(--app-input-bg);
       padding: 0 44px 0 16px;
       font-family: inherit;
       font-size: 14px;
-      color: #333;
+      color: var(--app-on-surface);
       outline: none;
       box-sizing: border-box;
       transition:

@@ -25,11 +25,11 @@
 
     strong {
       font-size: 15px;
-      color: rgba(0, 0, 0, 0.87);
+      color: var(--app-on-surface);
     }
 
     small {
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--app-muted);
       font-size: 12px;
       margin-top: 2px;
     }
@@ -55,13 +55,13 @@
   padding-bottom: 5px;
   padding-inline-start: 8px;
   padding-inline-end: 8px;
-  background-color: white;
+  background-color: var(--app-surface);
   border: 1px solid var(--app-input-border);
 
   border-radius: 7px;
 
   span {
-    color: black;
+    color: var(--app-on-surface);
   }
 }
 

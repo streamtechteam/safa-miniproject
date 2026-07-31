@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, Validators, FormControl } from '@angular/forms';
 import { AuthService } from '../dashboard/services/auth';
@@ -22,6 +22,24 @@ export class LoginComponent {
     captcha: new FormControl<string>('', [Validators.required]),
   });
   hidePassword = true;
+  isDarkMode = signal(localStorage.getItem('theme') === 'dark');
+
+  constructor() {
+    effect(() => {
+      const isDark = this.isDarkMode();
+      if (isDark) {
+        document.documentElement.classList.add('dark-theme');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark-theme');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  }
+
+  toggleDarkMode() {
+    this.isDarkMode.update((v) => !v);
+  }
 
   togglePassword(): void {
     this.hidePassword = !this.hidePassword;

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, inject, viewChild } from '@angular/core';
+import { Component, OnInit, signal, inject, viewChild, effect } from '@angular/core';
 import {
   ActivatedRoute,
   Router,
@@ -44,9 +44,25 @@ export class DashboardComponent implements OnInit {
   sidenav = viewChild.required<MatSidenav>('sidenav');
 
   datetime = new Date().toLocaleString('fa-ir');
+  isDarkMode = signal(localStorage.getItem('theme') === 'dark');
 
   authData = this.authService.getAuthData();
   isUserMenuOpened = false;
+
+  platform = window.innerWidth < 680 ? 'mobile' : 'desktop';
+
+  constructor() {
+    effect(() => {
+      const isDark = this.isDarkMode();
+      if (isDark) {
+        document.documentElement.classList.add('dark-theme');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark-theme');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  }
 
   ngOnInit() {
     if (window.innerWidth < 1024) {
@@ -57,6 +73,10 @@ export class DashboardComponent implements OnInit {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       this.updateTitleFromCurrentRoute();
     });
+  }
+
+  toggleDarkMode() {
+    this.isDarkMode.update((v) => !v);
   }
 
   private updateTitleFromCurrentRoute() {
