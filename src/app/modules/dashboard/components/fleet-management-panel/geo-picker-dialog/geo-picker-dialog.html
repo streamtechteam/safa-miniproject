@@ -6,13 +6,12 @@
   <div id="geo-picker-map" class="geo-map"></div>
 
   <div class="geo-readout">
-    <ng-container *ngIf="selected() as point; else noPoint">
-      <span>عرض جغرافیایی: <b>{{ point.latitude | number: '1.6-6' }}</b></span>
-      <span>طول جغرافیایی: <b>{{ point.longitude | number: '1.6-6' }}</b></span>
-    </ng-container>
-    <ng-template #noPoint>
-      <span class="geo-readout__empty">هنوز نقطه‌ای انتخاب نشده است</span>
-    </ng-template>
+    @if (selected(); as point){
+    <span>عرض جغرافیایی: <b>{{ point.latitude | number: '1.6-6' }}</b></span>
+    <span>طول جغرافیایی: <b>{{ point.longitude | number: '1.6-6' }}</b></span>
+    } @else {
+    <span class="geo-readout__empty">هنوز نقطه‌ای انتخاب نشده است</span>
+    }
   </div>
 </mat-dialog-content>
 

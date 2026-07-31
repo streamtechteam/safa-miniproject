@@ -30,9 +30,9 @@
     </div>
 
     <!-- vehicle card-->
+    @if(selected; as vehicle){
     <div
       class="vehicle-card"
-      *ngIf="selected as vehicle"
       cdkDrag
       cdkDragHandle
       [cdkDragBoundary]="'.stage'"
@@ -72,6 +72,7 @@
         </div>
       </div>
     </div>
+    }
 
     <mat-expansion-panel class="vehicles-panel" expanded>
       <mat-expansion-panel-header>
@@ -88,11 +89,8 @@
       </mat-expansion-panel-header>
 
       <div class="vehicles-panel__list">
-        <div
-          class="vehicles-panel__card"
-          *ngFor="let vehicle of vehicles; trackBy: trackById"
-          (click)="open(vehicle)"
-        >
+        @for (vehicle of vehicles; track trackById) {
+        <div class="vehicles-panel__card" (click)="open(vehicle)">
           <div
             class="avatar"
             [ngClass]="badgeOf(vehicle.state)"
@@ -120,6 +118,7 @@
             <mat-icon>chevron_left</mat-icon>
           </button>
         </div>
+        }
       </div>
     </mat-expansion-panel>
   </div>

@@ -14,7 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
-import { AuthService } from './services/auth';
+import { AuthService } from './services/auth.service';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { ProfileMenuComponent } from './components/profile-menu/profile-menu';
 @Component({

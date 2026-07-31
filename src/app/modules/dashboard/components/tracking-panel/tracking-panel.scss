@@ -84,6 +84,61 @@
   &.mat-expanded {
     bottom: 32px;
   }
+  &__list {
+    padding: 0 8px 8px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  &__card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    transition:
+      box-shadow 0.15s,
+      transform 0.15s,
+      border-color 0.15s;
+    &:hover {
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      border-color: #d8e3e0;
+    }
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .card-data {
+      flex: 1;
+      min-width: 0;
+      .org {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .plate {
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .type {
+        font-weight: 400;
+        color: #9a9a9a;
+        font-size: 12px;
+        margin-inline-start: 6px;
+      }
+    }
+    .arrow-left {
+      color: #bbb;
+    }
+  }
 }
 
 ::ng-deep .mat-expansion-panel-content-wrapper {
@@ -101,64 +156,6 @@
       height: 50%;
       width: unset;
     }
-  }
-}
-
-.vehicles-panel__list {
-  padding: 0 16px 16px;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.vehicles-panel__card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px;
-  cursor: pointer;
-  transition:
-    box-shadow 0.15s,
-    transform 0.15s,
-    border-color 0.15s;
-  &:hover {
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-    transform: translateY(-1px);
-    border-color: #d8e3e0;
-  }
-  .avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 2px solid;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-  }
-  .card-data {
-    flex: 1;
-    min-width: 0;
-    .org {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    .plate {
-      font-size: 15px;
-      font-weight: 700;
-    }
-    .type {
-      font-weight: 400;
-      color: #9a9a9a;
-      font-size: 12px;
-      margin-inline-start: 6px;
-    }
-  }
-  .arrow-left {
-    color: #bbb;
   }
 }
 

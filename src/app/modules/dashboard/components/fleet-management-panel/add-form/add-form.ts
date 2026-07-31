@@ -12,7 +12,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { GeoPoint, Vehicle, VehicleState } from '../../../models/fleet';
-import { HttpClientService } from '../../../services/http-client';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
@@ -20,6 +19,7 @@ import { GeoPickerDialogComponent } from '../geo-picker-dialog/geo-picker-dialog
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { FleetService } from '../../../services/fleet.service';
 
 @Component({
   selector: 'app-add-form',
@@ -38,7 +38,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class AddFormComponent {
   private dialog = inject(MatDialog);
-  private httpClientService: HttpClientService = inject(HttpClientService);
+  private fleetService: FleetService = inject(FleetService);
   private snackBar = inject(MatSnackBar);
   onClose = output<void>();
   onSubmited = output<void>();
@@ -80,7 +80,7 @@ export class AddFormComponent {
       this.form.markAllAsTouched();
       return;
     }
-    this.httpClientService
+    this.fleetService
       .addVehicle({
         ...this.form.getRawValue(),
         location: this.form.getRawValue().location as GeoPoint,

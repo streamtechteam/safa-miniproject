@@ -12,13 +12,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { User, UserRole } from '../../../models/user';
-import { HttpClientService } from '../../../services/http-client';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-add-form',
@@ -37,7 +37,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class AddFormComponent {
   private dialog = inject(MatDialog);
-  private httpClientService: HttpClientService = inject(HttpClientService);
+  private userService: UserService = inject(UserService);
   private snackBar = inject(MatSnackBar);
   onClose = output<void>();
   onSubmited = output<void>();
@@ -67,7 +67,7 @@ export class AddFormComponent {
       this.form.markAllAsTouched();
       return;
     }
-    this.httpClientService.addUser(this.form.getRawValue()).subscribe(() => {
+    this.userService.addUser(this.form.getRawValue()).subscribe(() => {
       this.snackBar.open('کاربر با موفقیت اضافه شد.', undefined, { duration: 2000 });
     });
     this.cleanUp();

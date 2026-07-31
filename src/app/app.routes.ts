@@ -7,6 +7,7 @@ import { dashboardGuard } from './modules/dashboard/guards/dashboard.guard';
 import { loginGuard } from './modules/login/guards/login.guard';
 import { adminGuard } from './modules/dashboard/guards/admin.guard';
 import { TrackingPanelComponent } from './modules/dashboard/components/tracking-panel/tracking-panel';
+import { dashboardRoutes } from './modules/dashboard/dashboard.routes';
 
 export const routes: Routes = [
   {
@@ -19,43 +20,17 @@ export const routes: Routes = [
     component: DashboardComponent,
     canActivate: [dashboardGuard],
     canActivateChild: [dashboardGuard],
-    children: [
-      {
-        path: '',
-        redirectTo: 'map',
-        pathMatch: 'full',
-      },
-      {
-        path: 'map',
-        title: 'سامانه کنترل ناوگان شیراز',
-        data: {
-          toolbarTitle: 'ردیابی',
-        },
-        component: TrackingPanelComponent,
-      },
-      {
-        path: 'fleet',
-        title: 'سامانه کنترل ناوگان شیراز',
-        canActivate: [adminGuard],
-        data: {
-          toolbarTitle: 'ناوگان',
-        },
-        component: FleetManagementPanelComponent,
-      },
-      {
-        path: 'users',
-        title: 'سامانه کنترل ناوگان شیراز',
-        canActivate: [adminGuard],
-        data: {
-          toolbarTitle: 'کاربران',
-        },
-        component: UserManagementPanelComponent,
-      },
-    ],
+    loadChildren: () =>
+      import('./modules/dashboard/dashboard.routes').then((m) => m.dashboardRoutes),
   },
   {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () => import('./modules/login/login').then((m) => m.LoginComponent),
     canActivate: [loginGuard],
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./modules/notfound/notfound.component').then((m) => m.NotFoundComponent),
   },
 ];

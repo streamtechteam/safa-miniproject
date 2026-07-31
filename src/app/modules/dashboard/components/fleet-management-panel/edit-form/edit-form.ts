@@ -9,7 +9,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { GeoPoint, Vehicle, VehicleState } from '../../../models/fleet';
-import { HttpClientService } from '../../../services/http-client';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,6 +16,7 @@ import { GeoPickerDialogComponent } from '../geo-picker-dialog/geo-picker-dialog
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { FleetService } from '../../../services/fleet.service';
 
 @Component({
   selector: 'app-edit-form',
@@ -34,7 +34,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './edit-form.scss',
 })
 export class EditFormComponent implements OnInit {
-  private httpClientService: HttpClientService = inject(HttpClientService);
+  private fleetService: FleetService = inject(FleetService);
   private snackBar: MatSnackBar = inject(MatSnackBar);
   onClose = output<void>();
   onSubmited = output<void>();
@@ -54,7 +54,7 @@ export class EditFormComponent implements OnInit {
   }
 
   getInitialData() {
-    this.httpClientService.getVehicleById(this.id()).subscribe((data) => {
+    this.fleetService.getVehicleById(this.id()).subscribe((data) => {
       this.form.patchValue(data);
     });
   }
@@ -82,7 +82,7 @@ export class EditFormComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    this.httpClientService
+    this.fleetService
       .editVehicle({
         ...this.form.getRawValue(),
         location: this.form.getRawValue().location as GeoPoint,

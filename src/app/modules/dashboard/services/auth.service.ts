@@ -1,14 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClientService } from './http-client';
 import { map, tap } from 'rxjs';
 import { User } from '../models/user';
 import { Router } from '@angular/router';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private httpClientService = inject(HttpClientService);
+  private userService: UserService = inject(UserService);
   private router: Router = inject(Router);
 
   private userRole: string = 'guest';
@@ -41,7 +41,7 @@ export class AuthService {
   }
 
   login(username: string, password: string) {
-    return this.httpClientService.getUsers().pipe(
+    return this.userService.getUsers().pipe(
       map((users) => {
         const user = users.filter((value) => {
           return value.password === password && value.username === username;

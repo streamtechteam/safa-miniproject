@@ -9,7 +9,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { User, UserRole } from '../../../models/user';
-import { HttpClientService } from '../../../services/http-client';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { roleOptions } from '../add-form/add-form';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-edit-form',
@@ -34,7 +34,7 @@ import { roleOptions } from '../add-form/add-form';
   styleUrl: './edit-form.scss',
 })
 export class EditFormComponent implements OnInit {
-  private httpClientService: HttpClientService = inject(HttpClientService);
+  private userService: UserService = inject(UserService);
   private snackBar: MatSnackBar = inject(MatSnackBar);
   onClose = output<void>();
   onSubmited = output<void>();
@@ -46,7 +46,7 @@ export class EditFormComponent implements OnInit {
   roleOptions = roleOptions;
 
   ngOnInit() {
-    this.httpClientService.getUserById(this.id()).subscribe((data) => {
+    this.userService.getUserById(this.id()).subscribe((data) => {
       this.form.patchValue(data);
     });
   }
@@ -73,7 +73,7 @@ export class EditFormComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    this.httpClientService.editUser(this.form.getRawValue()).subscribe((data) => {
+    this.userService.editUser(this.form.getRawValue()).subscribe((data) => {
       this.snackBar.open('کاربر با موفقیت ویرایش شد.', undefined, { duration: 2000 });
     });
     this.cleanUp();

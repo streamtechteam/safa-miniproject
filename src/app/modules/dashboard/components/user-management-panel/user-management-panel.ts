@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, inject, Signal, viewChild, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { HttpClientService } from '../../services/http-client';
 import { User } from '../../models/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AddFormComponent } from './add-form/add-form';
@@ -11,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-management-panel',
@@ -30,7 +30,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './user-management-panel.scss',
 })
 export class UserManagementPanelComponent implements AfterViewInit {
-  private httpClientService: HttpClientService = inject(HttpClientService);
+  private userService: UserService = inject(UserService);
   private snackBar: MatSnackBar = inject(MatSnackBar);
   displayedColumns: string[] = ['id', 'name', 'email', 'role', 'username', 'password', 'action'];
   dataSource: MatTableDataSource<User> = new MatTableDataSource<User>([]);
@@ -51,7 +51,7 @@ export class UserManagementPanelComponent implements AfterViewInit {
   }
 
   updateDataSource() {
-    this.httpClientService.getUsers().subscribe((data) => {
+    this.userService.getUsers().subscribe((data) => {
       this.dataSource.data = data;
       this.dataSource.paginator = this.paginator();
       this.applyFilter(this.searchField.getRawValue());
@@ -60,7 +60,7 @@ export class UserManagementPanelComponent implements AfterViewInit {
   deleteUser(id: string) {
     const snackBarRef = this.snackBar.open('آیا از حذف این کاربر اطمینان دارید ؟', 'تایید');
     snackBarRef.onAction().subscribe(() => {
-      this.httpClientService.removeUser(id).subscribe(() => {
+      this.userService.removeUser(id).subscribe(() => {
         this.snackBar.open('کاربر با موفقیت حذف شد.', undefined, { duration: 3000 });
       });
     });

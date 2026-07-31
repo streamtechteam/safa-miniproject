@@ -22,7 +22,6 @@ import { fromLonLat } from 'ol/proj';
 import View from 'ol/View';
 import OSM from 'ol/source/OSM';
 import { MatTableDataSource } from '@angular/material/table';
-import { HttpClientService } from '../../services/http-client';
 import { Vehicle, VehicleState } from '../../models/fleet';
 import { Vector } from 'ol/source';
 import Point from 'ol/geom/Point';
@@ -32,6 +31,7 @@ import VectorLayer from 'ol/layer/Vector';
 import { Select } from 'ol/interaction';
 import { click } from 'ol/events/condition';
 import { inAndOut } from 'ol/easing';
+import { FleetService } from '../../services/fleet.service';
 
 interface StateMeta {
   label: string;
@@ -63,7 +63,7 @@ const STATE: Record<VehicleState, StateMeta> = {
 })
 export class TrackingPanelComponent {
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
-  private httpClientService: HttpClientService = inject(HttpClientService);
+  private fleetService: FleetService = inject(FleetService);
 
   search = '';
   stateFilter: string = '';
@@ -109,7 +109,7 @@ export class TrackingPanelComponent {
     });
   }
   updateDataSource() {
-    this.httpClientService.getFleet().subscribe((data) => {
+    this.fleetService.getFleet().subscribe((data) => {
       this.dataSource.data = data;
       this.applyFilter(this.search);
 
