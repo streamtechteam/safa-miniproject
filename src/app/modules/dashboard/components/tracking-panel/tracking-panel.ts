@@ -122,7 +122,7 @@ export class TrackingPanelComponent {
       style: this.vehicleStyle,
     });
     this.map = new Map({
-      target: 'map-container',
+      target: 'map',
       layers: [new TileLayer({ source: new OSM() }), this.vectorLayer],
       view: this.mapView,
     });

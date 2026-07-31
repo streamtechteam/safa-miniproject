@@ -20,7 +20,6 @@ import { GeoPickerDialogComponent } from '../geo-picker-dialog/geo-picker-dialog
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { geoPointRequiredValidator } from '../geo-picker-dialog/geo-point';
 
 @Component({
   selector: 'app-add-form',
@@ -69,13 +68,10 @@ export class AddFormComponent {
         nonNullable: true,
         validators: Validators.required,
       }),
-      location: new FormControl<GeoPoint>(
-        { latitude: 0, longitude: 0 },
-        {
-          nonNullable: true,
-          validators: geoPointRequiredValidator,
-        },
-      ),
+      location: new FormControl<GeoPoint | undefined>(undefined, {
+        nonNullable: true,
+        validators: Validators.required,
+      }),
     });
   }
 
@@ -84,9 +80,14 @@ export class AddFormComponent {
       this.form.markAllAsTouched();
       return;
     }
-    this.httpClientService.addVehicle(this.form.getRawValue()).subscribe((data) => {
-      this.snackBar.open('خودرو با موفقیت اضافه شد', undefined, { duration: 2000 });
-    });
+    this.httpClientService
+      .addVehicle({
+        ...this.form.getRawValue(),
+        location: this.form.getRawValue().location as GeoPoint,
+      })
+      .subscribe((data) => {
+        this.snackBar.open('خودرو با موفقیت اضافه شد', undefined, { duration: 2000 });
+      });
     this.cleanUp();
     this.close();
   }

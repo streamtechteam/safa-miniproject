@@ -1,23 +1,20 @@
-<div id="body">
-  <div id="login-container">
-    <div id="login-container__login-fields">
-      <header class="login-container__header">
+<div class="body">
+  <div class="login">
+    <div class="login__fields">
+      <header class="login__header">
         <h1>سامانه کنترل و نظارت ناوگان</h1>
         <p>شهرداری شیراز</p>
       </header>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!--username-->
-        <div class="login-container__login-field">
+        <div class="login__field">
           <input
             type="text"
             formControlName="username"
             placeholder="نام کاربری"
             autocomplete="username"
           />
-          <span
-            class="login-container__login-field__icon login-container__login-field__icon--right"
-            aria-hidden="true"
-          >
+          <span class="login__icon login__icon--right" aria-hidden="true">
             <img src="user.svg" alt="" />
           </span>
         </div>
@@ -32,22 +29,19 @@
         }
 
         <!--password-->
-        <div class="login-container__login-field">
+        <div class="login__field">
           <input
             [type]="hidePassword ? 'password' : 'text'"
             formControlName="password"
             placeholder="گذرواژه"
             autocomplete="current-password"
           />
-          <span
-            class="login-container__login-field__icon login-container__login-field__icon--right"
-            aria-hidden="true"
-          >
+          <span class="login__icon login__icon--right" aria-hidden="true">
             <img src="lock.svg" alt="" />
           </span>
           <button
             type="button"
-            class="login-container__login-field__icon login-container__login-field__icon--left"
+            class="login__icon login__icon--left"
             (click)="togglePassword()"
             [attr.aria-label]="hidePassword ? 'نمایش گذرواژه' : 'پنهان کردن گذرواژه'"
           >
@@ -79,8 +73,8 @@
         }
 
         <!--captcha-->
-        <div class="login-container__captcha-row">
-          <div class="login-container__login-field login-container__captcha-input">
+        <div class="login__captcha-row">
+          <div class="login__field login__captcha-field">
             <input
               type="text"
               formControlName="captcha"
@@ -90,7 +84,7 @@
             />
           </div>
 
-          <div class="login-container__captcha-image">
+          <div class="login__captcha-image">
             <img src="placeholder-captcha.svg" alt="" />
           </div>
         </div>
@@ -105,9 +99,9 @@
         </div>
         }
 
-        <button type="submit" class="login-container__submit-btn">ورود</button>
+        <button type="submit" class="login__submit-btn">ورود</button>
       </form>
     </div>
-    <div id="login-container__picture-frame"></div>
+    <div class="login__picture-frame"></div>
   </div>
 </div>

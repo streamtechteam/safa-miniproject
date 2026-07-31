@@ -1,12 +1,10 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   Component,
+  inject,
   Inject,
-  input,
   OnDestroy,
   signal,
-  Signal,
   WritableSignal,
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -34,12 +32,12 @@ const EDIT_ZOOM = 14;
 export class GeoPickerDialogComponent implements AfterViewInit, OnDestroy {
   selected: WritableSignal<GeoPoint | null> = signal(null);
 
-  private readonly marker = new Feature<Point>();
   private map!: Map;
+  private readonly marker = new Feature<Point>();
+  private readonly initial: GeoPoint | null = inject(MAT_DIALOG_DATA);
 
   constructor(
     private readonly dialogRef: MatDialogRef<GeoPickerDialogComponent, GeoPoint | null>,
-    @Inject(MAT_DIALOG_DATA) private readonly initial: GeoPoint | null,
   ) {}
 
   ngAfterViewInit(): void {

@@ -1,11 +1,11 @@
 <div class="fleet" dir="rtl">
   <!-- map -->
-  <div class="map">
-    <div id="map-container" #mapContainer></div>
+  <div class="map-container">
+    <div id="map" #mapContainer></div>
 
     <!-- search bar -->
-    <div class="search-bar">
-      <mat-form-field appearance="outline" class="search-input">
+    <div class="search">
+      <mat-form-field appearance="outline" class="search__input">
         <mat-icon matPrefix>search</mat-icon>
         <input
           matInput
@@ -15,7 +15,7 @@
         />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="search-select">
+      <mat-form-field appearance="outline" class="search__select">
         <mat-select
           placeholder="وضعیت خودرو"
           [(ngModel)]="stateFilter"
@@ -31,14 +31,14 @@
 
     <!-- vehicle card-->
     <div
-      class="vehicle-detail"
+      class="vehicle-card"
       *ngIf="selected as vehicle"
       cdkDrag
       cdkDragHandle
       [cdkDragBoundary]="'.stage'"
       [cdkDragFreeDragPosition]="{x: 0, y: 0}"
     >
-      <div class="dh" cdkDragHandle>
+      <div class="vehicle-card__draghandle" cdkDragHandle>
         <mat-icon class="drag">drag_indicator</mat-icon>
         <div class="titles">
           <div class="plate">{{ vehicle.plate }}</div>
@@ -51,24 +51,24 @@
 
       <div class="body">
         <div class="field">
-          <span class="k">پلاک</span>
-          <span class="v">{{vehicle.plate}}</span>
+          <span class="key">پلاک</span>
+          <span class="value">{{vehicle.plate}}</span>
         </div>
         <div class="field">
-          <span class="k">سازمان</span>
-          <span class="v">{{vehicle.organization}}</span>
+          <span class="key">سازمان</span>
+          <span class="value">{{vehicle.organization}}</span>
         </div>
         <div class="field">
-          <span class="k">نوع</span>
-          <span class="v">{{vehicle.type}}</span>
+          <span class="key">نوع</span>
+          <span class="value">{{vehicle.type}}</span>
         </div>
         <div class="field">
-          <span class="k">کاربرد</span>
-          <span class="v">{{vehicle.usage}}</span>
+          <span class="key">کاربرد</span>
+          <span class="value">{{vehicle.usage}}</span>
         </div>
         <div class="field">
-          <span class="k">وضعیت</span>
-          <span class="v">{{labelOf(vehicle.state)}}</span>
+          <span class="key">وضعیت</span>
+          <span class="value">{{labelOf(vehicle.state)}}</span>
         </div>
       </div>
     </div>
@@ -87,9 +87,9 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div class="list">
+      <div class="vehicles-panel__list">
         <div
-          class="vcard"
+          class="vehicles-panel__card"
           *ngFor="let vehicle of vehicles; trackBy: trackById"
           (click)="open(vehicle)"
         >
@@ -101,7 +101,7 @@
             <mat-icon [style.color]="ringOf(vehicle.state)">{{ iconOf(vehicle) }}</mat-icon>
           </div>
 
-          <div class="meta">
+          <div class="card-data">
             <div class="org">{{ vehicle.organization}}</div>
             <div class="plate">
               {{ vehicle.plate }} <span class="type">({{ vehicle.type }})</span>
@@ -112,7 +112,11 @@
             <i class="dot"></i> {{ labelOf(vehicle.state) }}
           </span>
 
-          <button mat-icon-button class="chev" (click)="open(vehicle); $event.stopPropagation()">
+          <button
+            mat-icon-button
+            class="arrow-left"
+            (click)="open(vehicle); $event.stopPropagation()"
+          >
             <mat-icon>chevron_left</mat-icon>
           </button>
         </div>

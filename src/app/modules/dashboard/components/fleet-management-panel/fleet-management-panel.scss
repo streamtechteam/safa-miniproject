@@ -1,6 +1,21 @@
-.table-scroll {
-  overflow-x: auto;
+.table-container {
+  margin: 20px;
+}
 
+.table {
+  overflow-x: auto;
+  scrollbar-width: thin;
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    mat-form-field {
+      width: clamp(240px, 34vw, 340px);
+    }
+    button {
+      margin-inline-start: 10px;
+    }
+  }
   table {
     width: 100%;
   }
@@ -8,6 +23,4 @@
   td {
     white-space: nowrap;
   }
-
-  scrollbar-width: thin;
 }

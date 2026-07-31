@@ -1,34 +1,22 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #sidenav mode="side" opened class="sidenav">
-    <mat-toolbar class="mat-sidenav__mat-toolbar">
-      <img class="mat-sidenav__mat-toolbar__icon" src="./shiraz.png" alt="" />
+    <mat-toolbar class="sidenav__header">
+      <img class="sidenav__icon" src="./shiraz.png" alt="" />
     </mat-toolbar>
-    <div class="mat-sidenav__label">سامانه کنترل و نظارت ناوگان</div>
-    <div class="mat-sidenav__datetime">{{datetime}}</div>
+    <div class="sidenav__title">سامانه کنترل و نظارت ناوگان</div>
+    <div class="sidenav__datetime">{{datetime}}</div>
     <div></div>
-    <mat-nav-list class="mat-sidenav__mat-nav-list">
-      <div
-        class="mat-sidenav__mat-nav-list__item"
-        routerLink="/dashboard/map"
-        routerLinkActive="active"
-      >
+    <mat-nav-list class="sidenav__item-list">
+      <div class="sidenav__item" routerLink="/dashboard/map" routerLinkActive="active">
         <mat-icon>my_location</mat-icon>
         <span> ردیابی </span>
       </div>
-      <div
-        class="mat-sidenav__mat-nav-list__item"
-        routerLink="/dashboard/users"
-        routerLinkActive="active"
-      >
+      <div class="sidenav__item" routerLink="/dashboard/users" routerLinkActive="active">
         <mat-icon>person</mat-icon>
         <span> کاربران </span>
       </div>
 
-      <div
-        class="mat-sidenav__mat-nav-list__item"
-        routerLink="/dashboard/fleet"
-        routerLinkActive="active"
-      >
+      <div class="sidenav__item" routerLink="/dashboard/fleet" routerLinkActive="active">
         <mat-icon>directions_car</mat-icon>
         <span> ناوگان </span>
       </div>
@@ -36,16 +24,22 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <mat-toolbar class="mat-sidenav-content__mat-toolbar" color="primary">
-      <div class="mat-sidenav-content__mat-toolbar__title-container">
+    <mat-toolbar class="main-toolbar" color="primary">
+      <div class="main-toolbar__title">
         <button type="button" mat-icon-button (click)="sidenav.toggle()" dir="ltr">
           <mat-icon>menu</mat-icon>
         </button>
 
-        <span style="font-family: 'Vazirmatn'">{{toolbarTitle()}}</span>
+        <span>{{toolbarTitle()}}</span>
       </div>
 
-      <app-profile-menu></app-profile-menu>
+      <div class="main-toolbar__profile-container">
+        <app-profile-menu></app-profile-menu>
+
+        <button mat-icon-button>
+          <mat-icon>dark_mode</mat-icon>
+        </button>
+      </div>
     </mat-toolbar>
 
     <div class="content">

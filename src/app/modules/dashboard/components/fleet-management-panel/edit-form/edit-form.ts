@@ -12,7 +12,6 @@ import { GeoPoint, Vehicle, VehicleState } from '../../../models/fleet';
 import { HttpClientService } from '../../../services/http-client';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { geoPointRequiredValidator } from '../geo-picker-dialog/geo-point';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeoPickerDialogComponent } from '../geo-picker-dialog/geo-picker-dialog';
 import { MatDialog } from '@angular/material/dialog';
@@ -51,8 +50,11 @@ export class EditFormComponent implements OnInit {
     { value: 'disconnected', viewValue: 'قطع' },
   ];
   ngOnInit() {
+    this.getInitialData();
+  }
+
+  getInitialData() {
     this.httpClientService.getVehicleById(this.id()).subscribe((data) => {
-      console.log(data);
       this.form.patchValue(data);
     });
   }
@@ -68,13 +70,10 @@ export class EditFormComponent implements OnInit {
         nonNullable: true,
         validators: Validators.required,
       }),
-      location: new FormControl<GeoPoint>(
-        { latitude: 0, longitude: 0 },
-        {
-          nonNullable: true,
-          validators: geoPointRequiredValidator,
-        },
-      ),
+      location: new FormControl<GeoPoint | undefined>(undefined, {
+        nonNullable: true,
+        validators: Validators.required,
+      }),
     });
   }
 
@@ -83,9 +82,14 @@ export class EditFormComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    this.httpClientService.editVehicle(this.form.getRawValue()).subscribe((data) => {
-      this.snackBar.open('خودرو با موفقیت ویرایش شد.', undefined, { duration: 2000 });
-    });
+    this.httpClientService
+      .editVehicle({
+        ...this.form.getRawValue(),
+        location: this.form.getRawValue().location as GeoPoint,
+      })
+      .subscribe(() => {
+        this.snackBar.open('خودرو با موفقیت ویرایش شد.', undefined, { duration: 2000 });
+      });
     this.cleanUp();
     this.close();
   }
