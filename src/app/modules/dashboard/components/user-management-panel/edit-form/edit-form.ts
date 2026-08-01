@@ -34,8 +34,8 @@ import { UserService } from '../../../services/user.service';
   styleUrl: './edit-form.scss',
 })
 export class EditFormComponent implements OnInit {
-  private userService: UserService = inject(UserService);
-  private snackBar: MatSnackBar = inject(MatSnackBar);
+  private userService = inject(UserService);
+  private snackBar = inject(MatSnackBar);
   onClose = output<void>();
   onSubmited = output<void>();
 

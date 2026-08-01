@@ -1,7 +1,7 @@
 <div class="fleet" dir="rtl">
   <!-- map -->
   <div class="map-container">
-    <div id="map" #mapContainer></div>
+    <div id="map" #map></div>
 
     <!-- search bar -->
     <div class="search">
@@ -10,17 +10,12 @@
         <input
           matInput
           [(ngModel)]="search"
-          (keyup)="applyFilter($event.target.value)"
           placeholder="جستجوی پلاک، شناسه ی خودرو، سازمان و ..."
         />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="search__select">
-        <mat-select
-          placeholder="وضعیت خودرو"
-          [(ngModel)]="stateFilter"
-          (valueChange)="applyStateFilter($event)"
-        >
+        <mat-select placeholder="وضعیت خودرو" [(ngModel)]="stateFilter">
           <mat-option value="">بدون فیلتر</mat-option>
           <mat-option value="moving">درحال حرکت</mat-option>
           <mat-option value="stopped">متوقف</mat-option>
@@ -30,7 +25,7 @@
     </div>
 
     <!-- vehicle card-->
-    @if(selected; as vehicle){
+    @if(selected(); as vehicle){
     <div
       class="vehicle-card"
       cdkDrag
@@ -44,7 +39,7 @@
           <div class="plate">{{ vehicle.plate }}</div>
           <div class="sub">{{ vehicle.type }} · {{ vehicle.organization }}</div>
         </div>
-        <button mat-icon-button class="close" (click)="close(); $event.stopPropagation()">
+        <button mat-icon-button class="close" (click)="deselectVehicle(); $event.stopPropagation()">
           <mat-icon>close</mat-icon>
         </button>
       </div>
@@ -68,7 +63,7 @@
         </div>
         <div class="field">
           <span class="key">وضعیت</span>
-          <span class="value">{{labelOf(vehicle.state)}}</span>
+          <span class="value">{{vehicleStateMeta[vehicle.state].label}}</span>
         </div>
       </div>
     </div>
@@ -78,25 +73,23 @@
       <mat-expansion-panel-header>
         <mat-panel-title>لیست خودروها</mat-panel-title>
         <mat-panel-description>
-          <button
-            mat-icon-button
-            type="button"
-            (click)="updateDataSource();$event.stopPropagation()"
-          >
+          <button mat-icon-button type="button" (click)="updateData();$event.stopPropagation()">
             <mat-icon>refresh</mat-icon>
           </button>
         </mat-panel-description>
       </mat-expansion-panel-header>
 
       <div class="vehicles-panel__list">
-        @for (vehicle of vehicles; track trackById) {
-        <div class="vehicles-panel__card" (click)="open(vehicle)">
+        @for (vehicle of filteredVehicles(); track vehicle.id) {
+        <div class="vehicles-panel__card" (click)="selectVehicle(vehicle)">
           <div
             class="avatar"
-            [ngClass]="badgeOf(vehicle.state)"
-            [style.border-color]="ringOf(vehicle.state)"
+            [ngClass]="vehicleStateMeta[vehicle.state].badge"
+            [style.border-color]="iconOf(vehicle)"
           >
-            <mat-icon [style.color]="ringOf(vehicle.state)">{{ iconOf(vehicle) }}</mat-icon>
+            <mat-icon [style.color]="vehicleStateMeta[vehicle.state].ring"
+              >{{ iconOf(vehicle) }}</mat-icon
+            >
           </div>
 
           <div class="card-data">
@@ -106,14 +99,14 @@
             </div>
           </div>
 
-          <span class="badge" [ngClass]="badgeOf(vehicle.state)">
-            <i class="dot"></i> {{ labelOf(vehicle.state) }}
+          <span class="badge" [ngClass]="vehicleStateMeta[vehicle.state].badge">
+            <i class="dot"></i> {{ vehicleStateMeta[vehicle.state].label }}
           </span>
 
           <button
             mat-icon-button
             class="arrow-left"
-            (click)="open(vehicle); $event.stopPropagation()"
+            (click)="selectVehicle(vehicle); $event.stopPropagation()"
           >
             <mat-icon>chevron_left</mat-icon>
           </button>

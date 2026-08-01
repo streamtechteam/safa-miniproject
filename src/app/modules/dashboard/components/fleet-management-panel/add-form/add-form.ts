@@ -38,7 +38,7 @@ import { FleetService } from '../../../services/fleet.service';
 })
 export class AddFormComponent {
   private dialog = inject(MatDialog);
-  private fleetService: FleetService = inject(FleetService);
+  private fleetService = inject(FleetService);
   private snackBar = inject(MatSnackBar);
   onClose = output<void>();
   onSubmited = output<void>();

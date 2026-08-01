@@ -4,7 +4,7 @@
   [matMenuTriggerFor]="profileMenu"
 >
   <mat-icon>person</mat-icon>
-  <span> {{authData.name}} </span>
+  <span> {{authData?.name}} </span>
   <mat-icon>
     @if(!isUserMenuOpened){keyboard_arrow_down} @if(isUserMenuOpened){keyboard_arrow_up}
   </mat-icon>
@@ -14,7 +14,7 @@
   <div mat-menu-item disabled class="menu-header">
     <mat-icon>person</mat-icon>
     <div class="user-info">
-      <strong>{{ authData.name }}</strong>
+      <strong>{{ authData?.name }}</strong>
     </div>
   </div>
 

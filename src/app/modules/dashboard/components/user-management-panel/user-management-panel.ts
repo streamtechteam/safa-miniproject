@@ -11,6 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
+import { interval, startWith } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-management-panel',
@@ -29,9 +31,9 @@ import { UserService } from '../../services/user.service';
   templateUrl: './user-management-panel.html',
   styleUrl: './user-management-panel.scss',
 })
-export class UserManagementPanelComponent implements AfterViewInit {
-  private userService: UserService = inject(UserService);
-  private snackBar: MatSnackBar = inject(MatSnackBar);
+export class UserManagementPanelComponent {
+  private userService = inject(UserService);
+  private snackBar = inject(MatSnackBar);
   displayedColumns: string[] = ['id', 'name', 'email', 'role', 'username', 'password', 'action'];
   dataSource: MatTableDataSource<User> = new MatTableDataSource<User>([]);
   searchField: FormControl<string> = new FormControl<string>('', { nonNullable: true });
@@ -43,11 +45,13 @@ export class UserManagementPanelComponent implements AfterViewInit {
   };
   addDialog = false;
 
-  ngAfterViewInit() {
+  constructor() {
     this.updateDataSource();
-    setInterval(() => {
-      this.updateDataSource();
-    }, 1000);
+    interval(2000)
+      .pipe(startWith(0), takeUntilDestroyed())
+      .subscribe(() => {
+        this.updateDataSource();
+      });
   }
 
   updateDataSource() {

@@ -37,7 +37,7 @@ import { UserService } from '../../../services/user.service';
 })
 export class AddFormComponent {
   private dialog = inject(MatDialog);
-  private userService: UserService = inject(UserService);
+  private userService = inject(UserService);
   private snackBar = inject(MatSnackBar);
   onClose = output<void>();
   onSubmited = output<void>();

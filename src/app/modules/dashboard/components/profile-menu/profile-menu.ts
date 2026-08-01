@@ -1,4 +1,4 @@
-import { Component, viewChild } from '@angular/core';
+import { Component, inject, viewChild } from '@angular/core';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,13 +16,17 @@ import { AuthObject, AuthService } from '../../services/auth.service';
 export class ProfileMenuComponent {
   isUserMenuOpened = false;
   userMenu = viewChild.required(MatMenu);
-  authData: AuthObject;
+  private authService = inject(AuthService);
+  authData: AuthObject | null = this.authService.getAuthData();
 
-  constructor(private authService: AuthService) {
-    this.authData = this.authService.getAuthData();
-  }
+  // constructor(private authService: AuthService) {
+  //   this.authData = this.authService.getAuthData();
+  // }
 
   ngOnInit() {
+    if (this.authData === null) {
+      this.authService.logout();
+    }
     this.userMenu().closed.subscribe(() => {
       this.isUserMenuOpened = false;
     });

@@ -1,11 +1,16 @@
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
+  computed,
   ElementRef,
   inject,
+  OnDestroy,
+  signal,
   Signal,
   viewChild,
   ViewChild,
+  WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -32,13 +37,15 @@ import { Select } from 'ol/interaction';
 import { click } from 'ol/events/condition';
 import { inAndOut } from 'ol/easing';
 import { FleetService } from '../../services/fleet.service';
+import { interval, startWith } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface StateMeta {
   label: string;
   ring: string;
   badge: string;
 }
-const STATE: Record<VehicleState, StateMeta> = {
+const VEHICLE_STATE_META: Record<VehicleState, StateMeta> = {
   moving: { label: 'درحال حرکت', badge: 'st-moving', ring: '#13a89a' },
   disconnected: { label: 'قطع', badge: 'st-disconnected', ring: '#e0533d' },
   stopped: { label: 'متوقف', badge: 'st-stopped', ring: '#d99413' },
@@ -61,15 +68,36 @@ const STATE: Record<VehicleState, StateMeta> = {
   templateUrl: './tracking-panel.html',
   styleUrls: ['./tracking-panel.scss'],
 })
-export class TrackingPanelComponent {
-  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
-  private fleetService: FleetService = inject(FleetService);
+export class TrackingPanelComponent implements OnDestroy, AfterViewInit {
+  private fleetService = inject(FleetService);
 
   search = '';
   stateFilter: string = '';
 
-  selected: Vehicle | null = null;
+  selected: WritableSignal<Vehicle | null> = signal(null);
+  vehicleStateMeta = VEHICLE_STATE_META;
 
+  vehicles = signal<Vehicle[]>([]);
+  filteredVehicles = computed(() => {
+    const query = this.search.trim().toLowerCase();
+    const state = this.stateFilter;
+
+    return this.vehicles().filter((vehicle) => {
+      const matchesSearch =
+        !query ||
+        vehicle.id.toLowerCase().includes(query) ||
+        vehicle.plate.toLowerCase().includes(query) ||
+        vehicle.organization.toLowerCase().includes(query) ||
+        vehicle.type.toLowerCase().includes(query) ||
+        vehicle.usage.toLowerCase().includes(query);
+
+      const matchesState = !state || vehicle.state === state;
+
+      return matchesSearch && matchesState;
+    });
+  });
+
+  // OpenLayers stuff:
   private map!: Map;
   mapView = new View({
     center: fromLonLat([52.5837, 29.5918]),
@@ -89,31 +117,25 @@ export class TrackingPanelComponent {
   });
   vectorSource = new Vector();
   vectorLayer!: VectorLayer;
-  mapContainer: Signal<HTMLDivElement> = viewChild.required('mapContainer');
-  dataSource: MatTableDataSource<Vehicle> = new MatTableDataSource<Vehicle>();
+  mapSelect!: Select;
+  mapContainer = viewChild.required<ElementRef<HTMLDivElement>>('map');
 
-  vehicles: Vehicle[] = [];
-
+  constructor() {
+    this.updateData();
+    interval(2000)
+      .pipe(startWith(0), takeUntilDestroyed())
+      .subscribe(() => {
+        this.updateData();
+      });
+  }
   ngAfterViewInit(): void {
     this.initMap();
-    this.updateDataSource();
-    setInterval(() => {
-      this.updateDataSource();
-    }, 1000);
-    this.connectDataSource();
   }
-  connectDataSource() {
-    this.dataSource.connect().subscribe((rows) => {
-      this.vehicles = rows;
-      this.cdr.markForCheck();
-    });
-  }
-  updateDataSource() {
-    this.fleetService.getFleet().subscribe((data) => {
-      this.dataSource.data = data;
-      this.applyFilter(this.search);
 
-      this.syncMapWithVehicles();
+  updateData() {
+    this.fleetService.getFleet().subscribe((data) => {
+      this.vehicles.set(data);
+      this.syncMapWithVehicles(data);
     });
   }
   initMap() {
@@ -122,27 +144,27 @@ export class TrackingPanelComponent {
       style: this.vehicleStyle,
     });
     this.map = new Map({
-      target: 'map',
+      target: this.mapContainer().nativeElement,
       layers: [new TileLayer({ source: new OSM() }), this.vectorLayer],
       view: this.mapView,
     });
-    const select = new Select({
+    this.mapSelect = new Select({
       layers: [this.vectorLayer],
       condition: click,
     });
-    this.map.addInteraction(select);
+    this.map.addInteraction(this.mapSelect);
 
-    select.on('select', (e) => {
+    this.mapSelect.on('select', (e) => {
       if (e.selected.length > 0) {
-        this.open(e.selected[0].get('vehicleData'));
+        this.selectVehicle(e.selected[0].get('vehicleData'));
       }
     });
   }
 
-  syncMapWithVehicles() {
+  syncMapWithVehicles(vehicles: Vehicle[]) {
     if (!this.vectorSource) return;
 
-    this.vehicles.forEach((vehicle) => {
+    vehicles.forEach((vehicle) => {
       const existingFeature = this.vectorSource.getFeatureById(vehicle.id);
       const newCoordinate = fromLonLat([vehicle.location.longitude, vehicle.location.latitude]);
 
@@ -159,59 +181,35 @@ export class TrackingPanelComponent {
       }
     });
 
-    const currentVehicleIds = new Set(this.vehicles.map((v) => v.id));
+    const currentVehicleIds = new Set(this.vehicles().map((v) => v.id));
     this.vectorSource.getFeatures().forEach((feature) => {
       if (!currentVehicleIds.has(feature.getId() as string)) {
         this.vectorSource.removeFeature(feature);
       }
     });
   }
-  applyFilter(query: string) {
-    const trimmedQuery = query.trim().toLowerCase();
-    if (
-      trimmedQuery === 'moving' ||
-      trimmedQuery === 'stopped' ||
-      trimmedQuery === 'disconnected'
-    ) {
-      this.stateFilter = query;
-    } else {
-      this.stateFilter = '';
-    }
 
-    this.dataSource.filter = trimmedQuery;
-  }
-  applyStateFilter(state: VehicleState) {
-    this.stateFilter = state;
-    this.search = this.stateFilter;
-    this.applyFilter(state);
-  }
-
-  labelOf(s: VehicleState) {
-    return STATE[s].label;
-  }
-
-  ringOf(s: VehicleState) {
-    return STATE[s].ring;
-  }
   iconOf(vehicle: Vehicle) {
-    return vehicle.type.includes('سواری') ? 'directions_car' : 'local_shipping';
-  }
-  badgeOf(s: VehicleState) {
-    return STATE[s].badge;
+    return 'directions_car';
   }
 
-  open(vehicle: Vehicle) {
+  selectVehicle(vehicle: Vehicle) {
+    // cleanup previous selections
+    this.deselectVehicle();
+    this.selected.set(vehicle);
+
     this.map.getView().animate({
       center: fromLonLat([vehicle.location.longitude, vehicle.location.latitude]),
       zoom: 13,
       duration: 250,
       easing: inAndOut,
     });
-    this.selected = vehicle;
   }
-  close() {
-    this.selected = null;
+  deselectVehicle() {
+    this.selected.set(null);
   }
 
-  trackById = (_: number, vehicle: Vehicle) => vehicle.id;
+  ngOnDestroy() {
+    this.map?.setTarget(undefined);
+  }
 }

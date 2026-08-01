@@ -34,15 +34,15 @@ import { FleetService } from '../../../services/fleet.service';
   styleUrl: './edit-form.scss',
 })
 export class EditFormComponent implements OnInit {
-  private fleetService: FleetService = inject(FleetService);
-  private snackBar: MatSnackBar = inject(MatSnackBar);
+  private fleetService = inject(FleetService);
+  private snackBar = inject(MatSnackBar);
   onClose = output<void>();
   onSubmited = output<void>();
 
   id: InputSignal<string> = input.required<string>();
   form = this.defaultForm();
   locationTouched = false;
-  private dialog: MatDialog = inject(MatDialog);
+  private dialog = inject(MatDialog);
 
   stateOptions = [
     { value: 'moving', viewValue: 'در حال حرکت' },

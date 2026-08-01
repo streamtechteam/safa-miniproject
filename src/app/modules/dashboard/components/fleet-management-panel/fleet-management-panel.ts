@@ -12,6 +12,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FleetService } from '../../services/fleet.service';
+import { interval, startWith } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-fleet-management-panel',
@@ -30,9 +32,9 @@ import { FleetService } from '../../services/fleet.service';
   templateUrl: './fleet-management-panel.html',
   styleUrl: './fleet-management-panel.scss',
 })
-export class FleetManagementPanelComponent implements AfterViewInit {
-  private fleetService: FleetService = inject(FleetService);
-  private snackBar: MatSnackBar = inject(MatSnackBar);
+export class FleetManagementPanelComponent {
+  private fleetService = inject(FleetService);
+  private snackBar = inject(MatSnackBar);
   displayedColumns: string[] = ['id', 'plate', 'organization', 'type', 'usage', 'state', 'action'];
   dataSource: MatTableDataSource<Vehicle> = new MatTableDataSource<Vehicle>([]);
   searchField: FormControl<string> = new FormControl<string>('', { nonNullable: true });
@@ -52,12 +54,13 @@ export class FleetManagementPanelComponent implements AfterViewInit {
       this.applyFilter(this.searchField.getRawValue());
     });
   }
-
-  ngAfterViewInit() {
+  constructor() {
     this.updateDataSource();
-    setInterval(() => {
-      this.updateDataSource();
-    }, 1000);
+    interval(2000)
+      .pipe(startWith(0), takeUntilDestroyed())
+      .subscribe(() => {
+        this.updateDataSource();
+      });
   }
 
   deleteVehicle(id: string) {

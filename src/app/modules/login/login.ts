@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './login.scss',
 })
 export class LoginComponent {
-  private authService: AuthService = inject(AuthService);
+  private authService = inject(AuthService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
@@ -55,13 +55,13 @@ export class LoginComponent {
         this.loginForm.getRawValue().username as string,
         this.loginForm.getRawValue().password as string,
       )
-      .subscribe((data) => {
-        if (data === 200) {
+      .subscribe((success) => {
+        if (success) {
           this.snackBar.open('ورود موفقیت آمیز بود.', undefined, { duration: 3000 });
           setTimeout(() => {
             this.router.navigate(['/dashboard']);
           }, 1500);
-        } else if (data === 400) {
+        } else {
           this.snackBar.open('ورود شکست خورد.', undefined, { duration: 3000 });
         }
       });
