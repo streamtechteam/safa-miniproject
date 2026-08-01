@@ -1,7 +1,7 @@
 import { inject, Service } from '@angular/core';
 import { User } from '../models/user';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environment';
 
 @Service()

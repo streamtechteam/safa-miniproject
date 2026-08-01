@@ -85,11 +85,9 @@
           <div
             class="avatar"
             [ngClass]="vehicleStateMeta[vehicle.state].badge"
-            [style.border-color]="iconOf(vehicle)"
+            [style.border-color]="iconOf()"
           >
-            <mat-icon [style.color]="vehicleStateMeta[vehicle.state].ring"
-              >{{ iconOf(vehicle) }}</mat-icon
-            >
+            <mat-icon [style.color]="vehicleStateMeta[vehicle.state].ring">{{ iconOf() }}</mat-icon>
           </div>
 
           <div class="card-data">

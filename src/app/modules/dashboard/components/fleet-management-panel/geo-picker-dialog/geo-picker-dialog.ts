@@ -1,14 +1,15 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   inject,
-  Inject,
   OnDestroy,
   signal,
+  viewChild,
   WritableSignal,
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { Feature, Map, MapBrowserEvent, View } from 'ol';
+import { Feature, Map, View } from 'ol';
 import { Point } from 'ol/geom';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { OSM, Vector as VectorSource } from 'ol/source';
@@ -35,10 +36,8 @@ export class GeoPickerDialogComponent implements AfterViewInit, OnDestroy {
   private map!: Map;
   private readonly marker = new Feature<Point>();
   private readonly initial: GeoPoint | null = inject(MAT_DIALOG_DATA);
-
-  constructor(
-    private readonly dialogRef: MatDialogRef<GeoPickerDialogComponent, GeoPoint | null>,
-  ) {}
+  mapContainer = viewChild.required<ElementRef<HTMLDivElement>>('map');
+  dialogRef: MatDialogRef<GeoPickerDialogComponent, GeoPoint | null> = inject(MatDialogRef);
 
   ngAfterViewInit(): void {
     const markerLayer = new VectorLayer({
@@ -55,7 +54,7 @@ export class GeoPickerDialogComponent implements AfterViewInit, OnDestroy {
     const start: GeoPoint = this.initial ?? DEFAULT_CENTER;
 
     this.map = new Map({
-      target: 'geo-picker-map',
+      target: this.mapContainer().nativeElement,
       layers: [new TileLayer({ source: new OSM() }), markerLayer],
       view: new View({
         center: fromLonLat([start.longitude, start.latitude]),
@@ -63,9 +62,9 @@ export class GeoPickerDialogComponent implements AfterViewInit, OnDestroy {
       }),
     });
 
-    this.map.on('singleclick', (e) => this.select(e.coordinate));
+    this.map.on('singleclick', (e) => this.selectLocation(e.coordinate));
     if (this.initial) {
-      this.select(fromLonLat([this.initial.longitude, this.initial.latitude]));
+      this.selectLocation(fromLonLat([this.initial.longitude, this.initial.latitude]));
     }
 
     this.dialogRef.afterOpened().subscribe(() => this.map.updateSize());
@@ -83,7 +82,7 @@ export class GeoPickerDialogComponent implements AfterViewInit, OnDestroy {
   cancel(): void {
     this.dialogRef.close(null);
   }
-  private select(coordinate: Coordinate): void {
+  private selectLocation(coordinate: Coordinate): void {
     this.marker.setGeometry(new Point(coordinate));
     const [longitude, latitude] = toLonLat(coordinate);
     this.selected.set({ latitude, longitude });

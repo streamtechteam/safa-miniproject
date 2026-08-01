@@ -1,6 +1,5 @@
-import { inject, Injectable, Service } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { map, tap } from 'rxjs';
-import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
 
@@ -63,10 +62,10 @@ export class AuthService {
   }
 }
 
-export type AuthObject = {
+export interface AuthObject {
   id: string;
   name: string;
   email: string;
   username: string;
   role: UserRole;
-};
+}

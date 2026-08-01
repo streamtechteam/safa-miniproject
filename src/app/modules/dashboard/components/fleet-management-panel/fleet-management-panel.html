@@ -85,11 +85,7 @@
 </div>
 
 @if (editDialog.enabled){
-<app-edit-form
-  (onClose)="editDialog.enabled = false"
-  (onSubmited)="editDialog.enabled = false"
-  [id]="editDialog.id"
-></app-edit-form>
+<app-edit-form (closed)="editDialog.enabled = false" [id]="editDialog.id"></app-edit-form>
 } @if (addDialog){
-<app-add-form (onClose)="addDialog = false" (onSubmited)="addDialog = false"></app-add-form>
+<app-add-form (closed)="addDialog = false"></app-add-form>
 }

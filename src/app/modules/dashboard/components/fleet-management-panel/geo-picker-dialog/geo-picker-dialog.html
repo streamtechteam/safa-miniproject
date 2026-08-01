@@ -3,7 +3,7 @@
 <mat-dialog-content>
   <p class="geo-hint">روی نقشه کلیک کنید تا نقطه مورد نظر انتخاب شود.</p>
 
-  <div id="geo-picker-map" class="geo-map"></div>
+  <div id="geo-picker-map" class="geo-map" #map></div>
 
   <div class="geo-readout">
     @if (selected(); as point){

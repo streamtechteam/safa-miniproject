@@ -1,4 +1,4 @@
-export type Vehicle = {
+export interface Vehicle {
   id: string;
   plate: string;
   organization: string;
@@ -6,7 +6,7 @@ export type Vehicle = {
   usage: string;
   state: VehicleState;
   location: GeoPoint;
-};
+}
 
 export type VehicleState = 'stopped' | 'moving' | 'disconnected';
 

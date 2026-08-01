@@ -1,15 +1,12 @@
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   computed,
   ElementRef,
   inject,
   OnDestroy,
   signal,
-  Signal,
   viewChild,
-  ViewChild,
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -20,13 +17,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import Map from 'ol/Map';
 import TileLayer from 'ol/layer/Tile';
 import { fromLonLat } from 'ol/proj';
 import View from 'ol/View';
 import OSM from 'ol/source/OSM';
-import { MatTableDataSource } from '@angular/material/table';
 import { Vehicle, VehicleState } from '../../models/fleet';
 import { Vector } from 'ol/source';
 import Point from 'ol/geom/Point';
@@ -72,7 +68,7 @@ export class TrackingPanelComponent implements OnDestroy, AfterViewInit {
   private fleetService = inject(FleetService);
 
   search = '';
-  stateFilter: string = '';
+  stateFilter = '';
 
   selected: WritableSignal<Vehicle | null> = signal(null);
   vehicleStateMeta = VEHICLE_STATE_META;
@@ -189,7 +185,7 @@ export class TrackingPanelComponent implements OnDestroy, AfterViewInit {
     });
   }
 
-  iconOf(vehicle: Vehicle) {
+  iconOf() {
     return 'directions_car';
   }
 

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, Signal, viewChild, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, viewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { User } from '../../models/user';
@@ -31,7 +31,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './user-management-panel.html',
   styleUrl: './user-management-panel.scss',
 })
-export class UserManagementPanelComponent {
+export class UserManagementPanelComponent implements AfterViewInit {
   private userService = inject(UserService);
   private snackBar = inject(MatSnackBar);
   displayedColumns: string[] = ['id', 'name', 'email', 'role', 'username', 'password', 'action'];
@@ -53,11 +53,13 @@ export class UserManagementPanelComponent {
         this.updateDataSource();
       });
   }
-
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator();
+  }
   updateDataSource() {
     this.userService.getUsers().subscribe((data) => {
       this.dataSource.data = data;
-      this.dataSource.paginator = this.paginator();
+
       this.applyFilter(this.searchField.getRawValue());
     });
   }

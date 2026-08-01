@@ -49,6 +49,14 @@
       "username": "ahmad",
       "password": "1234",
       "id": "9DLpT6XVgL4"
+    },
+    {
+      "name": "mohammad",
+      "email": "mohammad@gmail.com",
+      "role": "technician ",
+      "username": "mohammad",
+      "password": "mohammad",
+      "id": "ahO61RETnMQ"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

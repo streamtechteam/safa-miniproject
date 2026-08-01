@@ -7,7 +7,7 @@ import {
   RouterOutlet,
   RouterLinkActive,
 } from '@angular/router';
-import { filter, startWith, switchMap } from 'rxjs/operators';
+import { filter, startWith } from 'rxjs/operators';
 
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,10 +15,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { AuthService } from './services/auth.service';
-import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { ProfileMenuComponent } from './components/profile-menu/profile-menu';
 import { interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { UserService } from './services/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,6 +46,8 @@ export class DashboardComponent implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
+  private userService = inject(UserService);
+  private snackBar = inject(MatSnackBar);
   sidenav = viewChild.required<MatSidenav>('sidenav');
 
   datetime = signal(new Date().toLocaleString('fa-ir'));
@@ -74,6 +78,12 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userService.getUsers().subscribe({
+      error: () => {
+        this.snackBar.open('سرور در دسترس نیست');
+      },
+    });
+
     if (window.innerWidth < 1024) {
       this.sidenav().close();
     }

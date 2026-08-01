@@ -1,4 +1,4 @@
-import { Component, inject, input, InputSignal, OnInit, output } from '@angular/core';
+import { Component, inject, input, InputSignal, OnInit, output, signal } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { User, UserRole } from '../../../models/user';
+import { UserRole } from '../../../models/user';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -36,9 +36,8 @@ import { UserService } from '../../../services/user.service';
 export class EditFormComponent implements OnInit {
   private userService = inject(UserService);
   private snackBar = inject(MatSnackBar);
-  onClose = output<void>();
-  onSubmited = output<void>();
-
+  closed = output<void>();
+  isSubmitting = signal(false);
   id: InputSignal<string> = input.required<string>();
   form = this.defaultForm();
   private dialog: MatDialog = inject(MatDialog);
@@ -73,14 +72,15 @@ export class EditFormComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    this.userService.editUser(this.form.getRawValue()).subscribe((data) => {
+    this.isSubmitting.set(true);
+    this.userService.editUser(this.form.getRawValue()).subscribe(() => {
       this.snackBar.open('کاربر با موفقیت ویرایش شد.', undefined, { duration: 2000 });
+      this.cleanUp();
+      this.close();
     });
-    this.cleanUp();
-    this.close();
   }
   close() {
-    this.onClose.emit();
+    this.closed.emit();
   }
   cleanUp() {
     this.form = this.defaultForm();

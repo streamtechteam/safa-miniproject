@@ -1,6 +1,10 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './guards/admin.guard';
 
+export interface DashboardRouteData {
+  toolbarTitle: string;
+}
+
 export const dashboardRoutes: Routes = [
   {
     path: '',
@@ -12,7 +16,7 @@ export const dashboardRoutes: Routes = [
     title: 'ردیابی',
     data: {
       toolbarTitle: 'ردیابی',
-    },
+    } satisfies DashboardRouteData,
     loadComponent: () =>
       import('./components/tracking-panel/tracking-panel').then((m) => m.TrackingPanelComponent),
   },
@@ -22,7 +26,7 @@ export const dashboardRoutes: Routes = [
     canActivate: [adminGuard],
     data: {
       toolbarTitle: 'ناوگان',
-    },
+    } satisfies DashboardRouteData,
     loadComponent: () =>
       import('./components/fleet-management-panel/fleet-management-panel').then(
         (m) => m.FleetManagementPanelComponent,
@@ -34,7 +38,7 @@ export const dashboardRoutes: Routes = [
     canActivate: [adminGuard],
     data: {
       toolbarTitle: 'کاربران',
-    },
+    } satisfies DashboardRouteData,
     loadComponent: () =>
       import('./components/user-management-panel/user-management-panel').then(
         (m) => m.UserManagementPanelComponent,

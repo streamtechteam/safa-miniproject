@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, Signal, viewChild, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, Signal, viewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
@@ -32,7 +32,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './fleet-management-panel.html',
   styleUrl: './fleet-management-panel.scss',
 })
-export class FleetManagementPanelComponent {
+export class FleetManagementPanelComponent implements AfterViewInit {
   private fleetService = inject(FleetService);
   private snackBar = inject(MatSnackBar);
   displayedColumns: string[] = ['id', 'plate', 'organization', 'type', 'usage', 'state', 'action'];
@@ -47,13 +47,6 @@ export class FleetManagementPanelComponent {
 
   readonly paginator: Signal<MatPaginator> = viewChild.required(MatPaginator);
 
-  updateDataSource() {
-    this.fleetService.getFleet().subscribe((data) => {
-      this.dataSource.data = data;
-      this.dataSource.paginator = this.paginator();
-      this.applyFilter(this.searchField.getRawValue());
-    });
-  }
   constructor() {
     this.updateDataSource();
     interval(2000)
@@ -61,6 +54,17 @@ export class FleetManagementPanelComponent {
       .subscribe(() => {
         this.updateDataSource();
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator();
+  }
+
+  updateDataSource() {
+    this.fleetService.getFleet().subscribe((data) => {
+      this.dataSource.data = data;
+      this.applyFilter(this.searchField.getRawValue());
+    });
   }
 
   deleteVehicle(id: string) {

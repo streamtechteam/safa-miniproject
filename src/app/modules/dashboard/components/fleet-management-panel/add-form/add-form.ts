@@ -1,17 +1,14 @@
-import { Component, inject, input, InputSignal, OnInit, output } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
-  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { GeoPoint, Vehicle, VehicleState } from '../../../models/fleet';
+import { GeoPoint, VehicleState } from '../../../models/fleet';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
@@ -40,9 +37,8 @@ export class AddFormComponent {
   private dialog = inject(MatDialog);
   private fleetService = inject(FleetService);
   private snackBar = inject(MatSnackBar);
-  onClose = output<void>();
-  onSubmited = output<void>();
-
+  closed = output<void>();
+  isSubmitting = signal(false);
   locationTouched = false;
 
   stateOptions = [
@@ -80,16 +76,17 @@ export class AddFormComponent {
       this.form.markAllAsTouched();
       return;
     }
+    this.isSubmitting.set(true);
     this.fleetService
       .addVehicle({
         ...this.form.getRawValue(),
         location: this.form.getRawValue().location as GeoPoint,
       })
-      .subscribe((data) => {
+      .subscribe(() => {
         this.snackBar.open('خودرو با موفقیت اضافه شد', undefined, { duration: 2000 });
+        this.cleanUp();
+        this.close();
       });
-    this.cleanUp();
-    this.close();
   }
 
   cleanUp() {
@@ -97,7 +94,7 @@ export class AddFormComponent {
   }
 
   close() {
-    this.onClose.emit();
+    this.closed.emit();
   }
 
   openMapDialog(): void {
@@ -112,7 +109,12 @@ export class AddFormComponent {
 
     ref.afterClosed().subscribe((point?: GeoPoint | null) => {
       if (point) this.form.get('location')?.setValue(point);
-      console.log(this.form);
     });
   }
 }
+
+export const stateOptions = [
+  { value: 'moving', viewValue: 'در حال حرکت' },
+  { value: 'stopped', viewValue: 'متوقف' },
+  { value: 'disconnected', viewValue: 'قطع' },
+];

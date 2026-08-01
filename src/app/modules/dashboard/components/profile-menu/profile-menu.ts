@@ -1,4 +1,4 @@
-import { Component, inject, viewChild } from '@angular/core';
+import { Component, inject, viewChild, OnInit } from '@angular/core';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,7 @@ import { AuthObject, AuthService } from '../../services/auth.service';
   templateUrl: './profile-menu.html',
   styleUrls: ['./profile-menu.scss'],
 })
-export class ProfileMenuComponent {
+export class ProfileMenuComponent implements OnInit {
   isUserMenuOpened = false;
   userMenu = viewChild.required(MatMenu);
   private authService = inject(AuthService);

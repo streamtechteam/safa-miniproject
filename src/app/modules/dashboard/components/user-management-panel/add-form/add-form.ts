@@ -1,17 +1,14 @@
-import { Component, inject, input, InputSignal, OnInit, output } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
-  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { User, UserRole } from '../../../models/user';
+import { UserRole } from '../../../models/user';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
@@ -39,9 +36,8 @@ export class AddFormComponent {
   private dialog = inject(MatDialog);
   private userService = inject(UserService);
   private snackBar = inject(MatSnackBar);
-  onClose = output<void>();
-  onSubmited = output<void>();
-
+  closed = output<void>();
+  isSubmitting = signal(false);
   roleOptions = roleOptions;
 
   form = this.defaultForm();
@@ -67,11 +63,12 @@ export class AddFormComponent {
       this.form.markAllAsTouched();
       return;
     }
+    this.isSubmitting.set(true);
     this.userService.addUser(this.form.getRawValue()).subscribe(() => {
       this.snackBar.open('کاربر با موفقیت اضافه شد.', undefined, { duration: 2000 });
+      this.cleanUp();
+      this.close();
     });
-    this.cleanUp();
-    this.close();
   }
 
   cleanUp() {
@@ -79,7 +76,7 @@ export class AddFormComponent {
   }
 
   close() {
-    this.onClose.emit();
+    this.closed.emit();
   }
 }
 
