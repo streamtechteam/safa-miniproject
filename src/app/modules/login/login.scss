@@ -229,7 +229,7 @@ $muted: var(--app-muted);
 
 @media (max-width: 680px) {
   .login {
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
   .login__picture-frame {
     flex: 0 0 200px;
