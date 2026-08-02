@@ -12,7 +12,13 @@ export class AuthService {
 
   checkLoggedIn(): boolean {
     if (localStorage.getItem('auth')) {
-      const storage = JSON.parse(localStorage.getItem('auth') as string) as AuthObject;
+      let storage: AuthObject;
+      try {
+        storage = JSON.parse(localStorage.getItem('auth') as string) as AuthObject;
+      } catch {
+        localStorage.removeItem('auth');
+        return false;
+      }
       if (!storage.id || !storage.username || !storage.role || !storage.name || !storage.email) {
         return false;
       }

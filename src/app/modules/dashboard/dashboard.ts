@@ -84,7 +84,7 @@ export class DashboardComponent implements OnInit {
       },
     });
 
-    if (window.innerWidth < 1024) {
+    if (this.platform == 'mobile') {
       this.sidenav().close();
     }
 
