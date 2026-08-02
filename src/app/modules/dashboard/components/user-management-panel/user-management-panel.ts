@@ -13,6 +13,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { interval, startWith } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ManagementPanel } from '../../models/management-panel';
 
 @Component({
   selector: 'app-user-management-panel',
@@ -31,7 +32,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './user-management-panel.html',
   styleUrl: './user-management-panel.scss',
 })
-export class UserManagementPanelComponent implements AfterViewInit {
+export class UserManagementPanelComponent implements AfterViewInit, ManagementPanel<User> {
   private userService = inject(UserService);
   private snackBar = inject(MatSnackBar);
   displayedColumns: string[] = ['id', 'name', 'email', 'role', 'username', 'password', 'action'];

@@ -16,6 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../../../services/user.service';
+import { AddForm } from '../../../models/form';
 
 @Component({
   selector: 'app-add-form',
@@ -32,7 +33,7 @@ import { UserService } from '../../../services/user.service';
   templateUrl: './add-form.html',
   styleUrl: './add-form.scss',
 })
-export class AddFormComponent {
+export class AddFormComponent implements AddForm {
   private dialog = inject(MatDialog);
   private userService = inject(UserService);
   private snackBar = inject(MatSnackBar);

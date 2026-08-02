@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { GeoPoint, VehicleState } from '../../../models/fleet';
+import { GeoPoint, Vehicle, VehicleState } from '../../../models/fleet';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,6 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { FleetService } from '../../../services/fleet.service';
+import { AddForm } from '../../../models/form';
 
 @Component({
   selector: 'app-add-form',
@@ -33,7 +34,7 @@ import { FleetService } from '../../../services/fleet.service';
   templateUrl: './add-form.html',
   styleUrl: './add-form.scss',
 })
-export class AddFormComponent {
+export class AddFormComponent implements AddForm {
   private dialog = inject(MatDialog);
   private fleetService = inject(FleetService);
   private snackBar = inject(MatSnackBar);
@@ -41,11 +42,7 @@ export class AddFormComponent {
   isSubmitting = signal(false);
   locationTouched = false;
 
-  stateOptions = [
-    { value: 'moving', viewValue: 'در حال حرکت' },
-    { value: 'stopped', viewValue: 'متوقف' },
-    { value: 'disconnected', viewValue: 'قطع' },
-  ];
+  stateOptions = stateOptions;
 
   form = this.defaultForm();
 
@@ -77,16 +74,11 @@ export class AddFormComponent {
       return;
     }
     this.isSubmitting.set(true);
-    this.fleetService
-      .addVehicle({
-        ...this.form.getRawValue(),
-        location: this.form.getRawValue().location as GeoPoint,
-      })
-      .subscribe(() => {
-        this.snackBar.open('خودرو با موفقیت اضافه شد', undefined, { duration: 2000 });
-        this.cleanUp();
-        this.close();
-      });
+    this.fleetService.addVehicle(this.form.getRawValue() as Omit<Vehicle, 'id'>).subscribe(() => {
+      this.snackBar.open('خودرو با موفقیت اضافه شد', undefined, { duration: 2000 });
+      this.cleanUp();
+      this.close();
+    });
   }
 
   cleanUp() {

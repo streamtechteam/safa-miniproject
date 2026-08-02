@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { roleOptions } from '../add-form/add-form';
 import { UserService } from '../../../services/user.service';
+import { EditForm } from '../../../models/form';
 
 @Component({
   selector: 'app-edit-form',
@@ -33,7 +34,7 @@ import { UserService } from '../../../services/user.service';
   templateUrl: './edit-form.html',
   styleUrl: './edit-form.scss',
 })
-export class EditFormComponent implements OnInit {
+export class EditFormComponent implements OnInit, EditForm {
   private userService = inject(UserService);
   private snackBar = inject(MatSnackBar);
   closed = output<void>();

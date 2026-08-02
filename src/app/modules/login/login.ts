@@ -2,7 +2,7 @@ import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, Validators, FormControl } from '@angular/forms';
 import { AuthService } from '../dashboard/services/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -15,6 +15,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private route = inject(ActivatedRoute);
 
   loginForm = new FormGroup({
     username: new FormControl<string>('', [Validators.required]),
@@ -59,7 +60,9 @@ export class LoginComponent {
         if (success) {
           this.snackBar.open('ورود موفقیت آمیز بود.', undefined, { duration: 3000 });
           setTimeout(() => {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate([
+              this.route.snapshot.queryParamMap.get('redirect') ?? '/dashboard',
+            ]);
           }, 1500);
         } else {
           this.snackBar.open('ورود شکست خورد.', undefined, { duration: 3000 });

@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Vehicle } from '../models/fleet';
 import { environment } from '../../../environment';
+import { ApiService } from '../models/api';
 
 @Service()
-export class FleetService {
+export class FleetService implements ApiService {
   private httpClient = inject(HttpClient);
 
   getFleet(): Observable<Vehicle[]> {

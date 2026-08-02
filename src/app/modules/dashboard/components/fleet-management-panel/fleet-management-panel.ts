@@ -14,6 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FleetService } from '../../services/fleet.service';
 import { interval, startWith } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ManagementPanel } from '../../models/management-panel';
 
 @Component({
   selector: 'app-fleet-management-panel',
@@ -32,7 +33,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './fleet-management-panel.html',
   styleUrl: './fleet-management-panel.scss',
 })
-export class FleetManagementPanelComponent implements AfterViewInit {
+export class FleetManagementPanelComponent implements AfterViewInit, ManagementPanel<Vehicle> {
   private fleetService = inject(FleetService);
   private snackBar = inject(MatSnackBar);
   displayedColumns: string[] = ['id', 'plate', 'organization', 'type', 'usage', 'state', 'action'];

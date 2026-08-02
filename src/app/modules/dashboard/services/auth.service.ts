@@ -10,26 +10,19 @@ export class AuthService {
   private userService = inject(UserService);
   private router = inject(Router);
 
-  private userRole: UserRole = 'guest';
-
-  constructor() {
-    this.checkLoggedIn();
-  }
-
   checkLoggedIn(): boolean {
     if (localStorage.getItem('auth')) {
       const storage = JSON.parse(localStorage.getItem('auth') as string) as AuthObject;
       if (!storage.id || !storage.username || !storage.role || !storage.name || !storage.email) {
         return false;
       }
-      this.userRole = storage.role;
       return true;
     }
     return false;
   }
 
   isAdmin(): boolean {
-    return this.userRole === 'sys-admin';
+    return this.getAuthData()?.role === 'sys-admin';
   }
 
   login(username: string, password: string) {
@@ -53,7 +46,12 @@ export class AuthService {
       return null;
     }
 
-    return JSON.parse(raw) as AuthObject;
+    try {
+      return JSON.parse(raw) as AuthObject;
+    } catch {
+      localStorage.removeItem('auth');
+      return null;
+    }
   }
 
   logout() {
